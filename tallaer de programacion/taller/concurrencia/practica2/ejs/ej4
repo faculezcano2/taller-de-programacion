@@ -1,0 +1,118 @@
+programa ej4
+procesos
+  proceso juntarFlores( ES cantFlores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cantFlores:= cantFlores + 1
+  fin
+  
+  proceso juntarPapeles(ES cantPapeles:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cantPapeles:= cantPapeles + 1
+  fin
+  
+  proceso maximo(ES max:numero; ES nomMax:numero; E num:numero; E nom:numero;)
+  comenzar
+    si(num > max)
+      max:=num
+      nomMax:=nom
+  fin
+
+areas
+  area:AreaP(25,25,75,75)
+  area2:AreaC(1,1,100,1)
+robots
+  robot recolector
+  variables
+    quiensoy:numero
+    quien:numero
+    avAl:numero
+    caAl:numero
+    avIn:numero
+    caIn:numero
+    cantPapeles:numero
+    cantFlores:numero
+    total:numero
+    nomMax:numero
+  comenzar
+    RecibirMensaje(quiensoy,fiscalizador)
+    RecibirMensaje(quien,fiscalizador)
+    si(quiensoy = quien)
+      Random(avAl,25,75)
+      Random(caAl,25,75)
+      avIn:= PosAv
+      caIn:= PosCa
+      Pos(avAl,caAl)
+      juntarPapeles(cantPapeles)
+      juntarFlores(cantFlores)
+      total:= cantPapeles + cantFlores
+      Pos(avIn,caIn)
+      EnviarMensaje(quiensoy,fiscalizador)
+      EnviarMensaje(total,fiscalizador)
+      RecibirMensaje(nomMax,fiscalizador)
+      si(quiensoy = nomMax)
+        Pos(50,50)
+        Informar(nomMax)
+  fin
+  
+  robot fiscal
+  variables
+    quien:numero
+    quiensoy:numero
+    total:numero
+    max:numero
+    nomMax:numero
+  comenzar
+    max:=0
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    EnviarMensaje(4,robot4)
+    repetir 10
+      Random(quien,1,4)
+      EnviarMensaje(quien,robot1)
+      EnviarMensaje(quien,robot2)
+      EnviarMensaje(quien,robot3)
+      EnviarMensaje(quien,robot4)
+      RecibirMensaje(quiensoy,*)
+      RecibirMensaje(total,*)
+      maximo(max,nomMax,total,quiensoy)
+    EnviarMensaje(nomMax,robot1)
+    EnviarMensaje(nomMax,robot2)
+    EnviarMensaje(nomMax,robot3)
+    EnviarMensaje(nomMax,robot4)
+  fin
+
+
+variables
+  robot1:recolector
+  robot2:recolector
+  robot3:recolector
+  robot4:recolector
+  fiscalizador:fiscal
+comenzar
+  AsignarArea(robot1,area2)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot3,area2)
+  AsignarArea(robot4,area2)
+  AsignarArea(fiscalizador,area2)
+  AsignarArea(robot1,area)
+  AsignarArea(robot2,area)
+  AsignarArea(robot3,area)
+  AsignarArea(robot4,area)
+  AsignarArea(fiscalizador,area)
+
+  
+  Iniciar(robot1,25,1)
+  Iniciar(robot2,30,1)
+  Iniciar(robot3,35,1)
+  Iniciar(robot4,40,1)
+  Iniciar(fiscalizador,1,1)
+fin
+
+
+
+

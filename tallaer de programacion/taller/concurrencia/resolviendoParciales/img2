@@ -1,0 +1,105 @@
+programa img2
+areas
+  {areaV1:AreaC(5,4,5,16)}
+  {areaH1:AreaC(5,4,9,4)}
+  {areaV2:AreaC(11,4,11,16)}
+  {areaH2:AreaC(11,4,15,4)}
+  areaP:AreaC(5,4,15,16)
+  {areaBuscar:AreaP(15,15,15,15)}
+  areaV1:AreaP(50,50,50,50)
+  areaH1:AreaP(51,51,51,51)
+  areaV2:AreaP(52,52,52,52)
+  areaH2:AreaP(53,53,53,53)
+  areaF:AreaP(1,1,1,1)
+robots
+  robot horizontal
+  variables
+    avAc:numero
+    caAc:numero
+    quiensoy:numero
+  comenzar
+    RecibirMensaje(quiensoy,fiscalizador)
+    si(quiensoy = 1)
+      Pos(5,4)
+    si(quiensoy = 2)
+      Pos(11,4)
+    derecha
+    repetir 4
+      avAc:=PosAv
+      caAc:=PosCa
+      BloquearEsquina(15,15)
+      Pos(15,15)
+      si(HayFlorEnLaEsquina)
+        tomarFlor
+      Pos(avAc,caAc)
+      LiberarEsquina(15,15)
+      depositarFlor
+      mover
+    si(quiensoy = 1)
+      EnviarMensaje(1,V1)
+    si(quiensoy = 2)
+      EnviarMensaje(2,V2)
+  fin  
+  
+  robot vertical
+  variables
+    avAc:numero
+    caAc:numero
+    quiensoy:numero
+  comenzar
+    RecibirMensaje(quiensoy,*)
+    si(quiensoy = 1)
+      Pos(5,4)
+    si(quiensoy = 2)
+      Pos(11,4)
+    repetir 12
+      avAc:=PosAv
+      caAc:=PosCa
+      BloquearEsquina(15,15)
+      Pos(15,15)
+      si(HayPapelEnLaEsquina)
+        tomarPapel
+      Pos(avAc,caAc)
+      LiberarEsquina(15,15)
+      depositarPapel
+      mover
+    EnviarMensaje(quiensoy,fiscalizador)
+  fin
+  
+  robot fiscalizador
+  variables
+    primerquiensoy:numero
+    segundoquiensoy:numero
+  comenzar
+    EnviarMensaje(1,H1)
+    EnviarMensaje(2,H2)
+    RecibirMensaje(primerquiensoy,*)
+    RecibirMensaje(segundoquiensoy,*)
+    Informar(primerquiensoy)
+  fin
+variables
+  H1:horizontal
+  H2:horizontal
+  V1:vertical
+  V2:vertical
+  fiscalizador:fiscalizador
+comenzar
+  AsignarArea(H1,areaP)
+  AsignarArea(V1,areaP)
+  AsignarArea(H2,areaP)
+  AsignarArea(V2,areaP)
+  AsignarArea(H1,areaH1)
+  AsignarArea(V1,areaV1)
+  AsignarArea(H2,areaH2)
+  AsignarArea(V2,areaV2)
+  {AsignarArea(H1,areaBuscar)}
+  {AsignarArea(V1,areaBuscar)}
+  {AsignarArea(H2,areaBuscar}
+  {AsignarArea(V2,areaBuscar)}
+  AsignarArea(fiscalizador,areaF)
+  Iniciar(V1,50,50)
+  Iniciar(H1,51,51)
+  Iniciar(V2,52,52)
+  Iniciar(H2,53,53)
+  Iniciar(fiscalizador,1,1)
+fin

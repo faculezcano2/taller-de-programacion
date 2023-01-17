@@ -1,0 +1,172 @@
+programa img4
+procesos
+  proceso juntarFlores( ES cant:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:=cant + 1
+  fin
+
+  proceso cuadrado(E A:numero; ES cant:numero)
+  comenzar
+    repetir 2
+      repetir 15
+        juntarFlores(cant)
+        mover
+      derecha
+      repetir A
+        juntarFlores(cant)
+        mover
+      derecha
+  fin
+  proceso cuadradoDejando(E avIr:numero; E calleIr:numero; ES avCu:numero; ES caCu:numero; E A:numero )
+  comenzar
+    repetir 15
+      Pos(avIr,calleIr)
+      tomarFlor
+      Pos(avCu,caCu)
+      depositarFlor
+      caCu:=caCu+1
+    derecha
+    repetir A
+      Pos(avIr,calleIr)
+      tomarFlor
+      Pos(avCu,caCu)
+      depositarFlor
+      avCu:=avCu + 1
+    derecha
+    repetir 15
+      Pos(avIr,calleIr)
+      tomarFlor
+      Pos(avCu,caCu)
+      depositarFlor
+      caCu:=caCu - 1
+    derecha
+    repetir A
+      Pos(avIr,calleIr)
+      tomarFlor
+      Pos(avCu,caCu)
+      depositarFlor
+      avCu:=avCu - 1
+    derecha
+
+  fin
+areas
+  areaEq1:AreaPC(1,10,100,25)
+  areaEq2:AreaPC(1,30,100,45)
+  areaInicio1:AreaP(1,1,1,1)
+  areaInicio2:AreaP(2,2,2,2)
+  areaInicio3:AreaP(3,3,3,3)
+  areaInicio4:AreaP(4,4,4,4)
+  areaInicioF:AreaP(5,5,5,5)
+robots
+  robot cuadrado
+  variables
+    quiensoy:numero
+    A:numero
+    AV:numero
+    cant:numero
+    avIn:numero
+    caIn:numero
+  comenzar
+    RecibirMensaje(quiensoy,fiscalizador)
+    RecibirMensaje(A,fiscalizador)
+    RecibirMensaje(AV,fiscalizador)
+    si(quiensoy = 1)
+      avIn:=PosAv
+      caIn:=PosCa
+      Pos(AV,10)
+      cuadrado(A,cant)
+      repetir cant
+        Pos(5,15)
+        depositarFlor
+        Pos(avIn,caIn)
+      EnviarMensaje(quiensoy,junta1)
+      EnviarMensaje(A,junta1)
+      EnviarMensaje(AV,junta1)
+    si(quiensoy = 2)
+      avIn:=PosAv
+      caIn:=PosCa
+      Pos(AV,30)
+      cuadrado(A,cant)
+      repetir cant
+        Pos(5,40)
+        depositarFlor
+        Pos(avIn,caIn)
+      EnviarMensaje(quiensoy,junta2)
+      EnviarMensaje(A,junta2)
+      EnviarMensaje(AV,junta2)
+  fin
+  
+  robot junta
+  variables
+    quiensoy:numero
+    A:numero
+    AV:numero
+    caIn:numero
+    avIn:numero
+    caCu:numero
+  comenzar
+    RecibirMensaje(quiensoy,*)
+    si(quiensoy = 1)
+      caIn:=PosCa
+      avIn:=PosAv
+      RecibirMensaje(A,c1)
+      RecibirMensaje(AV,c1)
+      caCu:=10
+      cuadradoDejando(5,15,AV,caCu,A)
+      EnviarMensaje(quiensoy,fiscalizador)
+      Pos(avIn,caIn)
+    si(quiensoy = 2)
+      caIn:=PosCa
+      avIn:=PosAv
+      RecibirMensaje(A,c2)
+      RecibirMensaje(AV,c2)
+      caCu:=30
+      cuadradoDejando(5,40,AV,caCu,A)
+      EnviarMensaje(quiensoy,fiscalizador)
+      Pos(avIn,caIn)
+  fin
+  
+  robot fiscalizador
+  variables
+    A:numero
+    AV:numero
+    primerEnllegar:numero
+    segundoEnllegar:numero
+  comenzar
+    EnviarMensaje(1,c1)
+    EnviarMensaje(2,c2)
+    Random(A,1,5)
+    EnviarMensaje(A,c1)
+    EnviarMensaje(A,c2)
+    Random(AV,1,95)
+    EnviarMensaje(AV,c1)
+    EnviarMensaje(AV,c2)
+    RecibirMensaje(primerEnllegar,*)
+    RecibirMensaje(segundoEnllegar,*)
+    Informar(primerEnllegar)
+  fin
+variables
+  c1:cuadrado
+  c2:cuadrado
+  junta1:junta
+  junta2:junta
+  fiscalizador:fiscalizador
+comenzar
+  AsignarArea(c1,areaEq1)
+  AsignarArea(junta1,areaEq1)
+  AsignarArea(c1,areaInicio1)
+  AsignarArea(junta1,areaInicio2)
+  AsignarArea(c2,areaEq2)
+  AsignarArea(junta2,areaEq2)
+  AsignarArea(c2,areaInicio3)
+  AsignarArea(junta2,areaInicio4)
+  AsignarArea(fiscalizador,areaInicioF)
+  Iniciar(c1,1,1)
+  Iniciar(junta1,2,2)
+  Iniciar(c2,3,3)
+  Iniciar(junta2,4,4)
+  Iniciar(fiscalizador,5,5)
+fin
+

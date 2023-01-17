@@ -1,0 +1,41 @@
+programa Ejercicio-1
+  
+procesos
+  proceso JuntarFloresDeUnaAvYContarEsqSinFlores (E posav:numero;E posca:numero;ES CantFlores:numero;ES cantEsq:numero)
+  comenzar
+    Pos(posav,posca)
+    repetir 99
+      si(~HayFlorEnLaEsquina)
+        cantEsq:= cantEsq + 1
+      mientras(HayFlorEnLaEsquina)
+        tomarFlor
+        CantFlores:= CantFlores + 1
+      mover
+      si(PosCa = 100)
+        mientras(HayFlorEnLaBolsa)
+          depositarFlor
+        Informar(CantFlores)
+        Informar(cantEsq)
+  fin   
+
+areas
+  ciudad : AreaC(1,1,100,100)
+  
+robots 
+  robot tipo1
+  variables
+    CantFlores:numero
+    cantEsq:numero
+  comenzar
+    CantFlores:=0
+    cantEsq:=0
+    JuntarFloresDeUnaAvYContarEsqSinFlores(1,1, CantFlores, cantEsq)
+  fin
+     
+variables 
+  robot1: tipo1
+comenzar 
+  AsignarArea(robot1,ciudad)
+  Iniciar(robot1, 1, 1)
+fin
+

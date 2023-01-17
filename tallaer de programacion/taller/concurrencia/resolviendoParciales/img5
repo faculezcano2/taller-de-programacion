@@ -1,0 +1,200 @@
+programa img5
+procesos
+  proceso juntarFlores(ES cant:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:=cant+1
+  fin
+  proceso juntarPapeles(ES cant:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:=cant+1
+  fin
+
+  proceso ladoVert1P(ES cantPapeles:numero)
+  comenzar
+    repetir 10
+      BloquearEsquina(PosAv, PosCa - 1)
+      mover
+      juntarPapeles(cantPapeles)
+      LiberarEsquina(PosAv, PosCa + 1)
+  fin
+  proceso ladoHor1P(ES cantPapeles:numero)
+  comenzar
+    repetir 10
+      BloquearEsquina(PosAv - 1,PosCa)
+      mover
+      juntarPapeles(cantPapeles)
+      LiberarEsquina(PosAv + 1,PosCa)
+  fin
+
+  proceso ladoVert2P(ES cantPapeles:numero)
+  comenzar
+    repetir 10
+      BloquearEsquina(PosAv, PosCa + 1)
+      mover
+      juntarPapeles(cantPapeles)
+      LiberarEsquina(PosAv,PosCa - 1)
+  fin
+  
+  proceso ladoHor2P(ES cantPapeles:numero)
+  comenzar
+    repetir 10
+      BloquearEsquina(PosAv + 1, PosCa)
+      mover
+      juntarPapeles(cantPapeles)
+      LiberarEsquina(PosAv - 1, PosCa)
+  fin
+
+  proceso cuadradoP( ES cantPapeles:numero)
+  comenzar
+    BloquearEsquina(PosAv,PosCa)
+    repetir 2
+      derecha
+    ladoVert1P(cantPapeles)
+    derecha
+    ladoHor1P(cantPapeles)
+    derecha
+    ladoVert2P(cantPapeles)
+    derecha
+    ladoHor2P(cantPapeles)
+    LiberarEsquina(PosAv,PosCa)
+  fin
+
+  proceso ladoVert1F(ES cantFlores:numero)
+  comenzar
+    repetir 10
+      BloquearEsquina(PosAv,PosCa + 1)
+      mover
+      juntarFlores(cantFlores)
+      LiberarEsquina(PosAv,PosCa - 1)
+  fin
+
+  proceso ladoHor1F( ES cantFlores:numero)
+  comenzar
+    repetir 10
+      BloquearEsquina(PosAv + 1, PosCa)
+      mover
+      juntarFlores(cantFlores)
+      LiberarEsquina(PosAv - 1, PosCa)
+  fin
+
+  proceso ladoVert2F(ES cantFlores:numero)
+  comenzar
+    repetir 10
+      BloquearEsquina(PosAv,PosCa - 1)
+      mover
+      juntarFlores(cantFlores)
+      LiberarEsquina(PosAv,PosCa + 1)
+  fin
+  
+  proceso ladoHor2F( ES cantFlores:numero)
+  comenzar
+    repetir 10
+      BloquearEsquina(PosAv - 1, PosCa)
+      mover
+      juntarFlores(cantFlores)
+      LiberarEsquina(PosAv + 1, PosCa)
+  fin
+
+  proceso cuadradoF( ES cantFlores:numero)
+  comenzar
+    BloquearEsquina(PosAv,PosCa)
+    ladoVert1F(cantFlores)
+    derecha
+    ladoHor1F(cantFlores)
+    derecha
+    ladoVert2F(cantFlores)
+    derecha
+    ladoHor2F(cantFlores)
+    LiberarEsquina(PosAv,PosCa)
+  fin
+areas
+  areaC1:AreaPC(3,3,13,13)
+  areaC2:AreaPC(16,3,26,13)
+  areaF:AreaP(14,6,14,6)
+robots
+  robot florero
+  variables
+    quiensoy:numero
+    cantFlores:numero
+    cantPapeles:numero
+  comenzar
+    RecibirMensaje(quiensoy,fiscalizador)
+    si((quiensoy = 1) | (quiensoy = 3))
+      cuadradoF(cantFlores)
+      EnviarMensaje(quiensoy,fiscalizador)
+      EnviarMensaje(cantFlores,fiscalizador)
+    si((quiensoy = 2) | (quiensoy = 4))
+      cuadradoP(cantPapeles)
+      EnviarMensaje(quiensoy,fiscalizador)
+      EnviarMensaje(cantPapeles,fiscalizador)
+  fin
+  
+  robot fiscalizador
+  variables
+    cantunos:numero
+    cantdos:numero
+    cantFlores:numero
+    cantPapeles:numero
+    cantTotalPapeles:numero
+    cantTotalFlores:numero
+    primeroEnLLegar:numero
+    segundoEnLLegar:numero
+    quiensoy:numero
+  comenzar
+    EnviarMensaje(1,f1)
+    EnviarMensaje(3,f2)
+    EnviarMensaje(2,p1)
+    EnviarMensaje(4,p2)
+    cantTotalFlores:=0
+    cantTotalPapeles:=0
+    repetir 4
+      RecibirMensaje(quiensoy,*)
+      si(quiensoy = 1)
+        cantunos:=cantunos + 1
+        RecibirMensaje(cantFlores,f1)
+        cantTotalFlores:=cantTotalFlores + cantFlores
+      si(quiensoy = 3)
+        cantunos:=cantunos + 1 
+        RecibirMensaje(cantFlores,f2)
+        cantTotalFlores:=cantTotalFlores + cantFlores
+      si(quiensoy = 2)
+        cantdos:=cantdos + 1
+        RecibirMensaje(cantPapeles,p1)
+        cantTotalPapeles:=cantTotalPapeles + cantPapeles
+      si(quiensoy = 4)
+        cantdos:=cantdos + 1
+        RecibirMensaje(cantPapeles,p2)
+        cantTotalPapeles:=cantTotalPapeles + cantPapeles
+        si(cantunos = 2)
+          primeroEnLLegar:= 1
+          segundoEnLLegar:=2
+        sino
+          si(cantdos = 2)
+            primeroEnLLegar:= 2
+            segundoEnLLegar:=1
+    Informar(primeroEnLLegar)
+    Informar(cantTotalPapeles)
+    Informar(cantTotalFlores)
+  fin
+variables
+  f1:florero
+  f2:florero
+  p1:florero
+  p2:florero
+  fiscalizador:fiscalizador
+comenzar
+  AsignarArea(f1,areaC1)
+  AsignarArea(p1,areaC1)
+  AsignarArea(f2,areaC2)
+  AsignarArea(p2,areaC2)
+  AsignarArea(fiscalizador,areaF)
+  Iniciar(f1,3,3)
+  Iniciar(p1,13,13)
+  Iniciar(f2,16,3)
+  Iniciar(p2,26,13)
+  Iniciar(fiscalizador,14,6)
+fin

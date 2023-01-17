@@ -1,0 +1,105 @@
+programa ej3
+procesos
+  proceso juntarFlores( ES cantFlores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cantFlores:=cantFlores+1
+  fin
+  
+  proceso juntarPapeles( ES cantPapeles:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cantPapeles:=cantPapeles+1
+  fin
+  
+  proceso recorrerDiezEsquinasJuntandoPapeles( ES cantPapeles:numero)
+  comenzar
+    repetir 9
+      juntarPapeles(cantPapeles)
+      mover
+  fin
+  
+  proceso recorrerDiesEsquinasJuntandoFlores( ES cantFlores:numero)
+  comenzar
+    repetir 9
+      juntarFlores(cantFlores)
+      mover
+  fin
+
+  
+areas
+  areaA:AreaP(1,1,100,1)
+  areaB:AreaP(1,5,100,5)
+robots
+  robot tipoA1
+  variables
+    cantPapeles:numero
+  comenzar
+    derecha
+    recorrerDiezEsquinasJuntandoPapeles(cantPapeles)
+    EnviarMensaje(cantPapeles,A2)
+    Pos(PosAv + 11, PosCa)
+    RecibirMensaje(cantPapeles,A2)
+    recorrerDiezEsquinasJuntandoPapeles(cantPapeles)
+    EnviarMensaje(cantPapeles,A2)
+  fin
+  
+  robot tipoA2
+  variables
+    cantPapeles:numero
+  comenzar
+    derecha
+    RecibirMensaje(cantPapeles,A1)
+    recorrerDiezEsquinasJuntandoPapeles(cantPapeles)
+    EnviarMensaje(cantPapeles,A1)
+    Pos(PosAv + 11, PosCa)
+    RecibirMensaje(cantPapeles,A1)
+    recorrerDiezEsquinasJuntandoPapeles(cantPapeles)
+    Informar(cantPapeles)
+  fin
+  
+  robot tipoB1
+  variables
+    cantFlores:numero
+  comenzar
+    derecha
+    recorrerDiesEsquinasJuntandoFlores(cantFlores)
+    EnviarMensaje(cantFlores,B2)
+    Pos(PosAv + 11, PosCa)
+    RecibirMensaje(cantFlores,B2)
+    recorrerDiesEsquinasJuntandoFlores(cantFlores)
+    EnviarMensaje(cantFlores,B2)
+  fin
+  
+  robot tipoB2
+  variables
+    cantFlores:numero
+  comenzar
+    derecha
+    RecibirMensaje(cantFlores,B1)
+    recorrerDiesEsquinasJuntandoFlores(cantFlores)
+    EnviarMensaje(cantFlores,B1)
+    Pos(PosAv + 11, PosCa)
+    RecibirMensaje(cantFlores,B1)
+    recorrerDiesEsquinasJuntandoFlores(cantFlores)
+    Informar(cantFlores)
+  fin
+variables
+  A1:tipoA1
+  A2:tipoA2
+  B1:tipoB1
+  B2:tipoB2
+comenzar
+  AsignarArea(A1,areaA)
+  AsignarArea(A2,areaA)
+  AsignarArea(B1,areaB)
+  AsignarArea(B2,areaB)
+  
+  Iniciar(A1,1,1)
+  Iniciar(A2,11,1)
+  Iniciar(B1,1,5)
+  Iniciar(B2,11,5)
+fin
+

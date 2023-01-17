@@ -1,0 +1,168 @@
+programa ej6
+procesos
+  proceso juntarPapeles(ES cant:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:=cant+1     
+  fin
+  
+  proceso juntarFlores(ES cant:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:=cant+1
+  fin
+  
+  proceso juntarFloresYPapeles(ES cantFlores:numero; ES cantPapeles:numero)
+  comenzar
+    juntarFlores(cantFlores)
+    juntarPapeles(cantPapeles)
+  fin
+  
+  proceso cuadrante7x7QueJuntaPapeles(ES cantPapeles:numero)
+  variables
+    acAv:numero
+    acCa:numero
+  comenzar
+    repetir 7
+      acAv:=PosAv
+      acCa:=PosCa
+      BloquearEsquina(acAv,acCa)
+      juntarPapeles(cantPapeles)
+      mover
+      LiberarEsquina(acAv, acCa)
+  fin
+  
+  proceso cuadrante6x6QueJuntaFlores(ES cantFlores:numero)
+  variables
+    acAv:numero
+    acCa:numero
+  comenzar
+    repetir 6
+      acAv:=PosAv
+      acCa:=PosCa
+      BloquearEsquina(acAv,acCa)
+      juntarFlores(cantFlores)
+      mover
+      LiberarEsquina(acAv, acCa)
+  fin
+  
+  proceso cuadrante10x10QueJuntaAmbasCosas(ES cantFlores:numero; ES cantPapeles:numero)
+  variables
+    acAv:numero
+    acCa:numero
+  comenzar
+    repetir 10
+      acAv:=PosAv
+      acCa:=PosCa
+      BloquearEsquina(acAv,acCa)
+      juntarFloresYPapeles(cantFlores,cantPapeles)
+      mover
+      LiberarEsquina(acAv, acCa)
+  fin
+  
+areas
+  area1:AreaC(1,1,100,100)
+  {areaC1:AreaPC(2,2,8,8)}
+  {areaC2:AreaPC(5,5,15,15)}
+  {areaC3:AreaPC(9,9,16,16)}
+  {area:AreaC(1,20,100,22)}
+robots
+  robot tipo1
+  variables
+    quiensoy:numero
+    cantFloresC1:numero
+    calle:numero
+    cantFloresC2:numero
+    cantPapelesC2:numero
+    cantPapelesC3:numero
+  comenzar
+    RecibirMensaje(quiensoy,fiscalizador)
+    si(quiensoy = 1)
+      repetir 4 
+        cuadrante6x6QueJuntaFlores(cantFloresC1)
+        derecha
+      EnviarMensaje(quiensoy,fiscalizador)
+    sino
+      si(quiensoy = 2)
+        repetir 4
+          cuadrante10x10QueJuntaAmbasCosas(cantFloresC2,cantPapelesC2)
+          derecha
+        EnviarMensaje(quiensoy,fiscalizador)
+      sino
+        si(quiensoy = 3)
+          repetir 4
+            cuadrante7x7QueJuntaPapeles(cantPapelesC3)
+            derecha
+          EnviarMensaje(quiensoy,fiscalizador)
+    si(quiensoy = 1)
+      RecibirMensaje(calle,fiscalizador)
+      Pos(1,calle)
+      derecha
+      mientras ((HayFlorEnLaBolsa) & (PosAv < 100))
+        depositarFlor
+        mover
+    sino
+      si(quiensoy = 2 )
+        RecibirMensaje(calle,fiscalizador)
+        Pos(1,calle)
+        derecha
+        mientras(((HayFlorEnLaBolsa) & (HayPapelEnLaBolsa)) & (PosAv < 100))
+          depositarPapel
+          depositarFlor
+          mover
+      sino
+        si(quiensoy = 3)
+          RecibirMensaje(calle,fiscalizador)
+          Pos(1,calle)
+          derecha
+          mientras HayPapelEnLaBolsa
+            depositarPapel
+            mover        
+  fin
+  
+  robot fiscal
+  variables
+    calle:numero
+    quiensoy:numero
+  comenzar
+    calle:=20
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    repetir 3
+      RecibirMensaje(quiensoy,*)
+      si(quiensoy = 1)
+        EnviarMensaje(calle,robot1)
+      sino
+        si(quiensoy = 2)
+          EnviarMensaje(calle,robot2)
+        sino
+          si(quiensoy = 3)
+            EnviarMensaje(calle,robot3)
+      calle:= calle + 1
+  fin
+variables
+  robot1:tipo1
+  robot2:tipo1
+  robot3:tipo1
+  fiscalizador:fiscal
+comenzar
+  AsignarArea(robot1,area1)
+  {AsignarArea(robot1,area)}
+  AsignarArea(robot2,area1)
+  {AsignarArea(robot2,area)}
+  AsignarArea(robot3,area1)
+  {AsignarArea(robot3,area)}
+  AsignarArea(fiscalizador,area1)
+  Iniciar(robot1,2,2)
+  Iniciar(robot2,5,5)
+  Iniciar(robot3,9,9)
+  Iniciar(fiscalizador,25,25)
+fin
+
+
+
+
+

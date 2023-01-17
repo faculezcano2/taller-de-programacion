@@ -1,0 +1,91 @@
+programa ej5
+areas
+  area1:AreaP(4,1,4,100)
+  area2:AreaP(6,1,6,100)
+  area3:AreaP(8,1,8,100)
+  area4:AreaP(10,1,10,100)
+  areaf:AreaP(11,11,11,11)
+  areaj:AreaP(12,1,12,1)
+robots
+  robot tipo1
+  variables
+    quiensoy:numero
+    caAc:numero
+    avAc:numero
+    estado:boolean
+  comenzar
+    RecibirMensaje(quiensoy,jefe)
+    estado:=V
+    mientras((estado = V) & (PosCa <= 99))
+      caAc:=PosCa
+      avAc:=PosAv
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      si(HayPapelEnLaEsquina)
+        tomarPapel
+      sino
+        estado:=F
+      Pos(avAc,caAc)
+      LiberarEsquina(11,11)
+      si(HayPapelEnLaBolsa)
+        depositarPapel
+        mover
+    EnviarMensaje(quiensoy,jefe)
+    EnviarMensaje(caAc,jefe)
+  fin
+  robot jef
+  variables
+    quiensoy:numero
+    estado:boolean
+    primerF:numero
+    calleMax:numero
+    calle:numero
+    rmax:numero
+  comenzar
+    calleMax:=0
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    EnviarMensaje(4,robot4)
+    repetir 4
+      RecibirMensaje(quiensoy,*)
+      si(quiensoy = 1)
+        RecibirMensaje(calle,robot1)
+      sino
+        si(quiensoy = 2)
+          RecibirMensaje(calle,robot2)
+        sino
+          si(quiensoy = 3)
+            RecibirMensaje(calle,robot3)
+          sino
+            si(quiensoy = 4)
+              RecibirMensaje(calle,robot4)
+    si(calleMax < calle)
+      calleMax:= calle
+      rmax:= quiensoy
+    Informar(rmax)
+  fin
+variables
+  robot1:tipo1
+  robot2:tipo1
+  robot3:tipo1
+  robot4:tipo1
+  jefe:jef
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot1,areaf)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot2,areaf)
+  AsignarArea(robot3,area3)
+  AsignarArea(robot3,areaf)
+  AsignarArea(robot4,area4)
+  AsignarArea(robot4,areaf)
+  AsignarArea(jefe,areaj)
+  Iniciar(jefe,12,1)
+  Iniciar(robot1,4,1)
+  Iniciar(robot2,6,1)
+  Iniciar(robot3,8,1)
+  Iniciar(robot4,10,1)
+fin
+
+

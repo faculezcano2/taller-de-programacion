@@ -1,0 +1,117 @@
+programa ej1
+procesos
+  proceso JuntarFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso depositarFlores
+  comenzar
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+      si (PosCa < 100)
+        mover
+  fin
+areas
+  areaR1:AreaP(1,1,1,100)
+  areaR2:AreaP(2,1,2,100)
+  areaR3:AreaP(3,1,3,100)
+  areaS:AreaP(100,100,100,100)
+robots
+  robot cliente
+  variables
+    quiensoy:numero
+    avAc:numero
+    caAc:numero
+    ahora:boolean
+    cant:numero
+  comenzar
+    RecibirMensaje(quiensoy,servidor)
+    caAc:=PosCa
+    avAc:=PosAv
+    mientras(caAc <= 99)
+      EnviarMensaje(quiensoy,servidor)
+      Random(cant,1,4)
+      EnviarMensaje(cant,servidor)
+      EnviarMensaje(avAc,servidor)
+      EnviarMensaje(caAc + 1,servidor)
+      RecibirMensaje(ahora, servidor)
+      si (ahora = V)
+        mover
+        JuntarFlores
+        Pos(avAc,caAc)
+        depositarFlores
+      caAc:= PosCa
+    EnviarMensaje(0, servidor)
+  fin
+  
+  robot servi
+  variables
+    quiensoy:numero
+    cant:numero
+    avIn:numero
+    caIn:numero
+    av:numero
+    ca:numero
+    terminados: numero
+  comenzar
+    JuntarFlores
+    EnviarMensaje(1,cliente1)
+    EnviarMensaje(2,cliente2)
+    EnviarMensaje(3,cliente3)
+    terminados := 0
+    mientras terminados < 3
+      RecibirMensaje(quiensoy,*)
+      si quiensoy = 0
+        terminados := terminados + 1
+      sino
+        avIn:=PosAv
+        caIn:=PosCa
+        si(quiensoy = 1)
+          RecibirMensaje(cant,cliente1)
+          RecibirMensaje(av,cliente1)
+          RecibirMensaje(ca,cliente1)
+        sino
+          si(quiensoy = 2)
+            RecibirMensaje(cant,cliente2)
+            RecibirMensaje(av,cliente2)
+            RecibirMensaje(ca,cliente2)
+          sino
+            si(quiensoy = 3)
+              RecibirMensaje(cant,cliente3)
+              RecibirMensaje(av,cliente3)
+              RecibirMensaje(ca,cliente3)  
+        Pos(av,ca)
+        repetir cant
+          depositarFlor
+        Pos(avIn,caIn)
+        si (quiensoy = 1)
+          EnviarMensaje(V, cliente1)
+        si (quiensoy = 2)
+          EnviarMensaje(V, cliente2)
+        si (quiensoy = 3)
+          EnviarMensaje(V, cliente3)
+  fin
+variables
+  servidor:servi
+  cliente1:cliente
+  cliente2:cliente
+  cliente3:cliente
+comenzar
+  AsignarArea(cliente1,areaR1)
+  AsignarArea(cliente2,areaR2)
+  AsignarArea(cliente3,areaR3)
+  AsignarArea(servidor,areaS)
+  AsignarArea(servidor,areaR1)
+  AsignarArea(servidor,areaR2)
+  AsignarArea(servidor,areaR3)
+  Iniciar(cliente1,1,1)
+  Iniciar(cliente2,2,1)
+  Iniciar(cliente3,3,1)
+  Iniciar(servidor,100,100)
+fin
+
+
+
+
+

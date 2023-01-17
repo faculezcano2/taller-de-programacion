@@ -1,0 +1,104 @@
+programa unparcial
+procesos
+  proceso juntarUnPapel(ES cant:numero)
+  comenzar
+    si(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:=cant+1
+  fin
+  proceso depositarUnaFlor
+  comenzar
+    si(HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso etapa(ES cant:numero)
+  comenzar
+    repetir 10
+      juntarUnPapel(cant)
+      depositarUnaFlor
+      si (PosCa <= 99)
+        mover
+  fin
+areas
+  areaR1:AreaP(1,1,1,100)
+  areaR2:AreaP(2,1,2,100)
+  areaR3:AreaP(3,1,3,100)
+  areaF:AreaP(4,1,4,1)
+  areaJ:AreaP(80,80,80,80)
+robots
+  robot recolector
+  variables
+    quiensoy:numero
+    cant:numero
+    ahora:boolean
+    caIn:numero
+    avIn:numero
+  comenzar
+    caIn:=PosCa
+    avIn:=PosAv
+    RecibirMensaje(quiensoy,fiscalizador)
+    mientras(PosCa < 99)
+      EnviarMensaje(quiensoy,fiscalizador)
+      RecibirMensaje(ahora,fiscalizador)
+      si(ahora = V)
+        etapa(cant)
+    repetir cant
+      BloquearEsquina(80,80)
+      Pos(80,80)
+      depositarPapel
+      Pos(avIn,caIn)
+      LiberarEsquina(80,80)
+    EnviarMensaje(V,fiscalizador)
+  fin
+  robot fiscalizador
+  variables
+    quiensoy:numero
+    seguir:boolean
+    sigo:boolean
+    avIn:numero
+    caIn:numero
+    cant:numero
+    voy:boolean
+  comenzar
+    avIn:=PosAv
+    caIn:=PosCa
+    cant:=0
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    repetir 10
+      repetir 3
+        RecibirMensaje(quiensoy,*)
+      EnviarMensaje(V,r1)
+      EnviarMensaje(V,r2)
+      EnviarMensaje(V,r3)
+    repetir 3
+      RecibirMensaje(voy,*)
+    BloquearEsquina(80,80)
+    Pos(80,80)
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:=cant+1
+    Pos(avIn,caIn)
+    LiberarEsquina(80,80)
+    Informar(cant)
+  fin
+variables
+  r1:recolector
+  r2:recolector
+  r3:recolector
+  fiscalizador:fiscalizador
+comenzar
+  AsignarArea(r1,areaR1)
+  AsignarArea(r1,areaJ)
+  AsignarArea(r2,areaR2)
+  AsignarArea(r2,areaJ)
+  AsignarArea(r3,areaR3)
+  AsignarArea(r3,areaJ)
+  AsignarArea(fiscalizador,areaF)
+  AsignarArea(fiscalizador,areaJ)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+  Iniciar(fiscalizador,4,1)
+fin

@@ -1,0 +1,105 @@
+programa ej3
+areas
+  area:AreaP(2,2,10,10)
+  areaInicio:AreaC(1,1,5,1)
+robots
+  robot tipo1
+  variables
+    quiensoy:numero
+    aveAl:numero
+    esqAl:numero
+    hay:boolean
+    cant:numero
+    avIn:numero
+    caIn:numero
+  comenzar
+    cant:=0
+    RecibirMensaje(quiensoy,jefazo)
+    RecibirMensaje(esqAl,jefazo)
+    RecibirMensaje(aveAl,jefazo)
+    hay:= V
+    avIn:=PosAv
+    caIn:=PosCa
+    mientras(hay = V)
+      BloquearEsquina(aveAl,esqAl)
+      Pos(aveAl,esqAl)
+      si(HayFlorEnLaEsquina)
+        tomarFlor
+        cant:=cant+1
+      sino
+        hay:= F
+      Pos(avIn,caIn)
+      LiberarEsquina(aveAl,esqAl)
+    EnviarMensaje(quiensoy,jefazo)
+    EnviarMensaje(cant,jefazo)
+  fin
+  
+  robot jefe
+  variables
+    esqAl:numero
+    aveAl:numero
+    rMax:numero 
+    cantMax:numero
+    quiensoy:numero
+    cant:numero
+  comenzar
+    cantMax:=0
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    EnviarMensaje(4,robot4)
+    Random(esqAl,2,10)
+    EnviarMensaje(esqAl,robot1)
+    EnviarMensaje(esqAl,robot2)
+    EnviarMensaje(esqAl,robot3)
+    EnviarMensaje(esqAl,robot4)
+    Random(aveAl,2,10)
+    EnviarMensaje(aveAl,robot1)
+    EnviarMensaje(aveAl,robot2)
+    EnviarMensaje(aveAl,robot3)
+    EnviarMensaje(aveAl,robot4)
+    repetir 4
+      RecibirMensaje(quiensoy,*)
+      si(quiensoy = 1)
+        RecibirMensaje(cant,robot1)
+      sino
+        si(quiensoy = 2)
+          RecibirMensaje(cant,robot2)
+        sino
+          si(quiensoy = 3)
+            RecibirMensaje(cant,robot3)
+          sino
+            si(quiensoy = 4)
+              RecibirMensaje(cant,robot4)
+      si(cant > cantMax)
+        cantMax:=cant
+        rMax:=quiensoy
+    Informar(rMax)
+  fin
+variables
+  robot1:tipo1
+  robot2:tipo1
+  robot3:tipo1
+  robot4:tipo1
+  jefazo:jefe
+comenzar
+  AsignarArea(robot1,areaInicio)
+  AsignarArea(robot1,area)
+  AsignarArea(robot2,areaInicio)
+  AsignarArea(robot2,area)
+  AsignarArea(robot3,areaInicio)
+  AsignarArea(robot3,area)
+  AsignarArea(robot4,areaInicio)
+  AsignarArea(robot4,area)
+  AsignarArea(jefazo,areaInicio)
+  AsignarArea(jefazo,area)
+  Iniciar(robot1,2,1)
+  Iniciar(robot2,3,1)
+  Iniciar(robot3,4,1)
+  Iniciar(robot4,5,1)
+  Iniciar(jefazo,1,1)
+fin
+
+
+
+

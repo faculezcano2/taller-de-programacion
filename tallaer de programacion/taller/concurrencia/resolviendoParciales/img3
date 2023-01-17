@@ -1,0 +1,198 @@
+programa img3
+procesos
+  proceso juntarPapelesYFlores(ES cantPapeles:numero; ES cantFlores:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cantPapeles:=cantPapeles+1
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cantFlores:=cantFlores+1
+  fin
+  
+  proceso rectanguloA(ES cantPapeles:numero; ES cantFlores:numero)
+  variables
+    caAc:numero
+    avAc:numero
+  comenzar
+    cantPapeles:=0
+    cantFlores:=0
+    repetir 2
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      mover
+    derecha
+    repetir 8
+      caAc:=PosCa
+      avAc:=PosAv
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      BloquearEsquina(avAc + 1,caAc)
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      mover
+      caAc:=PosCa
+      avAc:=PosAv
+      LiberarEsquina(avAc - 1,caAc)
+    derecha
+    repetir 2
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      mover
+    derecha
+    repetir 8
+      caAc:=PosCa
+      avAc:=PosAv
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      BloquearEsquina(avAc - 1,caAc)
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      mover
+      caAc:=PosCa
+      avAc:=PosAv
+      LiberarEsquina(avAc + 1,caAc)
+    derecha
+  fin
+  
+  proceso rectanguloB(ES cantPapeles:numero; ES cantFlores:numero)
+  variables
+    caAc:numero
+    avAc:numero
+  comenzar
+    cantPapeles:=0
+    cantFlores:=0
+    repetir 8
+      caAc:=PosCa
+      avAc:=PosAv
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      BloquearEsquina(avAc,caAc + 1)
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      mover
+      caAc:=PosCa
+      avAc:=PosAv
+      LiberarEsquina(avAc,caAc - 1)
+    derecha
+    repetir 2
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      mover
+    derecha
+    repetir 8
+      caAc:=PosCa
+      avAc:=PosAv
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      BloquearEsquina(avAc,caAc - 1)
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      mover
+      caAc:=PosCa
+      avAc:=PosAv
+      LiberarEsquina(avAc,caAc + 1)
+    derecha
+    repetir 2
+      juntarPapelesYFlores(cantPapeles,cantFlores)
+      mover
+    derecha
+  fin
+areas
+  areaT:AreaC(1,1,9,9)
+  inicio1:AreaP(20,1,20,1)
+  inicio2:AreaP(20,2,20,2)
+  inicio3:AreaP(20,4,20,4)
+  inicio4:AreaP(20,5,20,5)
+  inicioJ:AreaP(20,15,20,15)
+robots
+  robot juntador
+  variables
+    quiensoy:numero
+    cantPapeles1:numero
+    cantPapeles2:numero
+    cantPapeles3:numero
+    cantPapeles4:numero
+    cantFlores1:numero
+    cantFlores2:numero
+    cantFlores3:numero
+    cantFlores4:numero
+  comenzar
+    RecibirMensaje(quiensoy,jefe)
+    si(quiensoy = 1)
+      Pos(1,2)
+      rectanguloA(cantPapeles1,cantFlores1)
+      EnviarMensaje(quiensoy,jefe)
+      EnviarMensaje(cantPapeles1,jefe)
+      EnviarMensaje(cantFlores1,jefe)
+    si(quiensoy = 2)
+      Pos(1,6)
+      rectanguloA(cantPapeles2,cantFlores2)
+      EnviarMensaje(quiensoy,jefe)
+      EnviarMensaje(cantPapeles2,jefe)
+      EnviarMensaje(cantFlores2,jefe)
+    si(quiensoy = 3)
+      Pos(2,1)
+      rectanguloB(cantPapeles3,cantFlores3)
+      EnviarMensaje(quiensoy,jefe)
+      EnviarMensaje(cantPapeles3,jefe)
+      EnviarMensaje(cantFlores3,jefe)
+    si(quiensoy = 4)
+      Pos(6,1)
+      rectanguloB(cantPapeles4,cantFlores4)
+      EnviarMensaje(quiensoy,jefe)
+      EnviarMensaje(cantPapeles4,jefe)
+      EnviarMensaje(cantFlores4,jefe)
+  fin
+  
+  robot jefe
+  variables
+    quiensoy:numero
+    cantPapeles:numero
+    cantFlores:numero
+    totalF:numero
+    totalP:numero
+  comenzar
+    EnviarMensaje(1,j1)
+    EnviarMensaje(2,j2)
+    EnviarMensaje(3,j3)
+    EnviarMensaje(4,j4)
+    totalF:=0
+    totalP:=0
+    repetir 4
+      RecibirMensaje(quiensoy,*)
+      si(quiensoy = 1)
+        RecibirMensaje(cantPapeles,j1)
+        totalP:= totalP + cantPapeles
+        RecibirMensaje(cantFlores,j1)
+        totalF:= totalF + cantFlores
+      si(quiensoy = 2)
+        RecibirMensaje(cantPapeles,j2)
+        totalP:= totalP + cantPapeles
+        RecibirMensaje(cantFlores,j2)
+        totalF:= totalF + cantFlores
+      si(quiensoy = 3)
+        RecibirMensaje(cantPapeles,j3)
+        totalP:= totalP + cantPapeles
+        RecibirMensaje(cantFlores,j3)
+        totalF:= totalF + cantFlores
+      si(quiensoy = 4)
+        RecibirMensaje(cantPapeles,j4)
+        totalP:= totalP + cantPapeles
+        RecibirMensaje(cantFlores,j4)
+        totalF:= totalF + cantFlores
+    Informar(totalP)
+    Informar(totalF)
+  fin
+variables
+  j1:juntador
+  j2:juntador
+  j3:juntador
+  j4:juntador
+  jefe:jefe
+comenzar
+  AsignarArea(j1,inicio1)
+  AsignarArea(j2,inicio2)
+  AsignarArea(j3,inicio3)
+  AsignarArea(j4,inicio4)
+  AsignarArea(j1,areaT)
+  AsignarArea(j2,areaT)
+  AsignarArea(j3,areaT)
+  AsignarArea(j4,areaT)
+  AsignarArea(jefe,inicioJ)
+  Iniciar(j1,20,1)
+  Iniciar(j2,20,2)
+  Iniciar(j3,20,4)
+  Iniciar(j4,20,5)
+  Iniciar(jefe,20,15)
+fin
+

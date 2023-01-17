@@ -1,0 +1,100 @@
+programa Ejercicio3
+procesos
+  proceso juntarFlor(ES cantFlores:numero)
+  comenzar
+    si(HayFlorEnLaEsquina)
+      tomarFlor
+      cantFlores:=cantFlores+1
+  fin
+  
+  proceso juntarPapel(ES cantPapeles:numero)
+  comenzar
+    si(HayPapelEnLaEsquina)
+      tomarPapel
+      cantPapeles:=cantPapeles+1
+  fin
+  
+  proceso recorrerJuntandoPapeles(ES cantPapeles:numero)
+  comenzar
+    repetir 12
+      repetir 99
+        juntarPapel(cantPapeles)
+        mover
+      derecha
+      mover
+      derecha
+      repetir 99
+        juntarPapel(cantPapeles)
+        mover
+      repetir 3
+        derecha
+      mover
+      repetir 3
+        derecha
+    repetir 99
+      juntarPapel(cantPapeles)
+      mover
+    Informar(cantPapeles)
+  fin
+  
+  proceso recorrerJuntandoFlores(ES cantFlores:numero)
+  comenzar
+    repetir 12
+      repetir 99
+        juntarFlor(cantFlores)
+        mover
+      derecha
+      mover
+      derecha
+      repetir 99
+        juntarFlor(cantFlores)
+        mover
+      repetir 3
+        derecha
+      mover
+      repetir 3
+        derecha
+    repetir 99 
+      juntarFlor(cantFlores)
+      mover
+    Informar(cantFlores)
+  fin
+areas
+  area1 : AreaP(1,1,25,100)
+  area2 : AreaP(26,1,50,100)
+  area3 : AreaP(51,1,75,100)
+  area4 : AreaP(76,1,100,100)
+robots 
+  robot tipo1
+  variables
+    cantPapeles:numero
+  comenzar
+    cantPapeles:=0
+    recorrerJuntandoPapeles(cantPapeles)
+  fin
+  robot tipo2
+  variables
+    cantFlores:numero
+  comenzar
+    cantFlores:=0
+    recorrerJuntandoFlores(cantFlores)
+  fin
+     
+variables 
+  robot1: tipo2
+  robot2: tipo1
+  robot3: tipo2 
+  robot4: tipo1
+comenzar 
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot3,area3)
+  AsignarArea(robot4,area4)
+  Iniciar(robot1, 1, 1)
+  Iniciar(robot2, 26, 1 )
+  Iniciar(robot3, 51, 1 )
+  Iniciar(robot4,76,1)
+fin
+
+
+

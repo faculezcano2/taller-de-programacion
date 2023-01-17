@@ -1,0 +1,106 @@
+programa img1
+procesos
+  proceso juntarPapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso depositarPapeles
+  comenzar
+    mientras(HayPapelEnLaBolsa)
+      depositarPapel
+  fin
+areas
+  areaG:AreaC(1,1,21,40)
+  areaF:AreaP(25,1,25,1)
+robots
+  robot jugador
+  variables
+    quiensoy:numero
+    av:numero
+    pasos:numero
+    cant:numero
+    ahora:boolean
+    calle:numero
+  comenzar
+    RecibirMensaje(quiensoy,fiscalizador)
+    EnviarMensaje(quiensoy,fiscalizador)
+    RecibirMensaje(av,fiscalizador)
+    Pos(av,1)
+    cant:=0
+    mientras((cant < 5)&(PosCa <= 40))
+      Random(pasos,1,10)
+      repetir pasos
+        juntarPapeles
+        mover
+      cant:=cant+1
+    EnviarMensaje(quiensoy,fiscalizador)
+    calle:=PosCa
+    EnviarMensaje(calle,fiscalizador)
+    RecibirMensaje(ahora,fiscalizador)
+    BloquearEsquina(1,30)
+    Pos(1,30)
+    depositarPapeles
+    Pos(av,1)
+    LiberarEsquina(1,30)
+  fin
+  robot fiscalizador
+  variables
+    quiensoy:numero
+    av:numero
+    max:numero
+    rmax:numero
+    calle:numero
+  comenzar
+    max:=0
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    repetir 3
+      RecibirMensaje(quiensoy,*)
+      si(quiensoy = 1)
+        Random(av,1,7)
+        EnviarMensaje(av,r1)
+      sino
+        si(quiensoy = 2)
+          Random(av,8,14)
+          EnviarMensaje(av,r2)
+        sino
+          si(quiensoy = 3)
+            Random(av,15,21)
+            EnviarMensaje(av,r3)
+    repetir 3
+      RecibirMensaje(quiensoy,*)
+      si(quiensoy = 1)
+        RecibirMensaje(calle,r1)
+      sino
+        si(quiensoy = 2)
+          RecibirMensaje(calle,r2)
+        sino
+          si(quiensoy = 3)
+            RecibirMensaje(calle,r3)
+      si(calle > max)
+        max:=calle
+        rmax:=quiensoy
+    Informar(rmax)
+    EnviarMensaje(V,r1)
+    EnviarMensaje(V,r2)
+    EnviarMensaje(V,r3)
+  fin
+variables
+  r1:jugador
+  r2:jugador
+  r3:jugador
+  fiscalizador:fiscalizador
+comenzar
+  AsignarArea(r1,areaG)
+  AsignarArea(r2,areaG)
+  AsignarArea(r3,areaG)
+  AsignarArea(fiscalizador,areaF)
+  Iniciar(r1,1,1)
+  Iniciar(r2,8,1)
+  Iniciar(r3,15,1)
+  Iniciar(fiscalizador,25,1)
+fin
+
+

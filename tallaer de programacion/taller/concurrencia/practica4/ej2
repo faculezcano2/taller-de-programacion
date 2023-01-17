@@ -1,0 +1,87 @@
+programa ej2
+areas
+  areaM:AreaP(50,50,50,50)
+  areaP1:AreaP(5,1,5,100)
+  areaP2:AreaP(10,1,10,100)
+  areaC1:AreaP(11,1,11,1)
+  areaC2:AreaP(12,1,12,1)
+robots
+  robot productor
+  variables
+    caAc:numero
+    avAc:numero
+    cant:numero
+  comenzar
+    mientras(PosCa < 99)
+      caAc:=PosCa
+      avAc:=PosAv
+      cant:=0
+      mientras((cant < 5) & (PosCa < 99))
+        mientras(HayPapelEnLaEsquina)
+          tomarPapel
+          cant:=cant + 1
+        mover
+        caAc:=PosCa
+        avAc:=PosAv
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      mientras(HayPapelEnLaBolsa)
+        depositarPapel
+      Pos(avAc,caAc)
+      LiberarEsquina(50,50)
+      mover
+  fin
+
+  robot consumidor
+  variables
+    cantInvali:numero
+    avIn:numero
+    caIn:numero
+    cant:numero
+    cantHay:numero
+  comenzar
+    avIn:=PosAv
+    caIn:=PosCa
+    mientras( cantInvali < 8)
+      Random(cant,2,5)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      si(~HayPapelEnLaEsquina)
+        cantInvali:=cantInvali+1
+        Pos(avIn,caIn)
+        LiberarEsquina(50,50)
+      sino
+        cantHay:=0
+        mientras((HayPapelEnLaEsquina) & (cantHay < cant))
+          tomarPapel
+          cantHay:=cantHay + 1
+        si(cantHay < cant)
+          cantInvali:=cantInvali+1
+          repetir cantHay
+            depositarPapel
+        Pos(avIn,caIn)
+        LiberarEsquina(50,50)
+      mientras(HayPapelEnLaBolsa)
+        depositarPapel
+  fin
+variables
+  p1:productor
+  p2:productor
+  c1:consumidor
+  c2:consumidor
+comenzar
+  AsignarArea(p1,areaP1)
+  AsignarArea(p1,areaM)
+  AsignarArea(p2,areaP2)
+  AsignarArea(p2,areaM)
+  AsignarArea(c1,areaC1)
+  AsignarArea(c1,areaM)
+  AsignarArea(c2,areaC2)
+  AsignarArea(c2,areaM)
+  
+  Iniciar(p1,5,1)
+  Iniciar(p2,10,1)
+  Iniciar(c1,11,1)
+  Iniciar(c2,12,1)
+fin
+
